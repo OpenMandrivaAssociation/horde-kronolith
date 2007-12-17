@@ -20,7 +20,6 @@ Requires:	php-pear-Date
 Requires:	php-pear-HTML_Common
 Requires:	php-pear-HTML_Select
 BuildArch:	noarch
-BuildRoot:	%{_tmppath}/%{name}-%{version}
 
 %description
 Kronolith is the Horde calendar application. It provides a stable and
