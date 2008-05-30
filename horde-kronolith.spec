@@ -1,7 +1,7 @@
 %define	module	kronolith
 %define	name	horde-%{module}
 %define version 2.2
-%define release %mkrel 1
+%define release %mkrel 2
 
 %define _requires_exceptions pear(Horde.*)
 
@@ -31,11 +31,6 @@ applications.
 
 %prep
 %setup -q -n %{module}-h3-%{version}
-
-# fix encoding
-for file in `find . -type f`; do
-    perl -pi -e 'BEGIN {exit unless -T $ARGV[0];} tr/\r//d;' $file
-done
 
 %build
 
