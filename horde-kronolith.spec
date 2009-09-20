@@ -1,7 +1,7 @@
 %define	module	kronolith
 %define	name	horde-%{module}
-%define version 2.3
-%define release %mkrel 2
+%define version 2.3.2
+%define release %mkrel 1
 
 %define _requires_exceptions pear(Horde.*)
 
@@ -11,9 +11,10 @@ Release: 	%{release}
 Summary:	The Horde calendar application
 License:	LGPL
 Group:		System/Servers
-Source0:	ftp://ftp.horde.org/pub/%{module}/%{module}-h3-%{version}.tar.bz2
 URL:		http://www.horde.org/%{module}
+Source0:	ftp://ftp.horde.org/pub/%{module}/%{module}-h3-%{version}.tar.gz
 Requires(post):	rpm-helper
+Requires:	horde >= 3.3.5
 Requires:	horde-imp >= 4.0
 Requires:	php-mcal
 Requires:	php-pear-Date
@@ -36,6 +37,28 @@ applications.
 
 %install
 rm -rf %{buildroot}
+
+# apache configuration
+install -d -m 755 %{buildroot}%{_webappconfdir}
+cat > %{buildroot}%{_webappconfdir}/%{name}.conf <<EOF
+# %{name} Apache configuration file
+
+<Directory %{_datadir}/horde/%{module}/lib>
+    Deny from all
+</Directory>
+
+<Directory %{_datadir}/horde/%{module}/locale>
+    Deny from all
+</Directory>
+
+<Directory %{_datadir}/horde/%{module}/scripts>
+    Deny from all
+</Directory>
+
+<Directory %{_datadir}/horde/%{module}/templates>
+    Deny from all
+</Directory>
+EOF
 
 # horde configuration
 install -d -m 755 %{buildroot}%{_sysconfdir}/horde/registry.d
@@ -66,26 +89,18 @@ EOF
 find . -name .htaccess -exec rm -f {} \;
 
 # install files
-install -d -m 755 %{buildroot}%{_var}/www/horde/%{module}
 install -d -m 755 %{buildroot}%{_datadir}/horde/%{module}
-install -d -m 755 %{buildroot}%{_sysconfdir}/horde
-cp -pR *.php %{buildroot}%{_var}/www/horde/%{module}
-cp -pR themes %{buildroot}%{_var}/www/horde/%{module}
-cp -pR js %{buildroot}%{_var}/www/horde/%{module}
-cp -pR calendars %{buildroot}%{_var}/www/horde/%{module}
+cp -pR *.php %{buildroot}%{_datadir}/horde/%{module}
+cp -pR themes %{buildroot}%{_datadir}/horde/%{module}
+cp -pR js %{buildroot}%{_datadir}/horde/%{module}
+cp -pR calendars %{buildroot}%{_datadir}/horde/%{module}
 cp -pR lib %{buildroot}%{_datadir}/horde/%{module}
 cp -pR locale %{buildroot}%{_datadir}/horde/%{module}
 cp -pR scripts %{buildroot}%{_datadir}/horde/%{module}
 cp -pR templates %{buildroot}%{_datadir}/horde/%{module}
 cp -pR config %{buildroot}%{_sysconfdir}/horde/%{module}
 
-# use symlinks to recreate original structure
-pushd %{buildroot}%{_var}/www/horde/%{module}
-ln -s ../../../..%{_sysconfdir}/horde/%{module} config
-ln -s ../../../..%{_datadir}/horde/%{module}/lib .
-ln -s ../../../..%{_datadir}/horde/%{module}/locale .
-ln -s ../../../..%{_datadir}/horde/%{module}/templates .
-popd
+install -d -m 755 %{buildroot}%{_sysconfdir}/horde
 pushd %{buildroot}%{_datadir}/horde/%{module}
 ln -s ../../../..%{_sysconfdir}/horde/%{module} config
 popd
@@ -115,18 +130,18 @@ if [ $1 = 1 ]; then
 	%create_ghostfile %{_sysconfdir}/horde/%{module}/conf.php.bak apache apache 644
 
 fi
+%_post_webapp
 
 %postun
 if [ $1 = 0 ]; then
 	htpasswd -bD /etc/mpasswd kronolith ""
 fi
+%_postun_webapp
 
 %files
 %defattr(-,root,root)
 %doc README COPYING docs
+%config(noreplace) %{_webappconfdir}/%{name}.conf
 %config(noreplace) %{_sysconfdir}/horde/registry.d/%{module}.php
 %config(noreplace) %{_sysconfdir}/horde/%{module}
 %{_datadir}/horde/%{module}
-%{_var}/www/horde/%{module}
-
-
