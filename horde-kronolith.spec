@@ -1,7 +1,7 @@
 %define	module	kronolith
 %define	name	horde-%{module}
 %define version 2.3.2
-%define release %mkrel 2
+%define release %mkrel 3
 
 %define _requires_exceptions pear(Horde.*)
 
@@ -134,13 +134,17 @@ if [ $1 = 1 ]; then
 	%create_ghostfile %{_sysconfdir}/horde/%{module}/conf.php.bak apache apache 644
 
 fi
+%if %mdkversion < 201010
 %_post_webapp
+%endif
 
 %postun
 if [ $1 = 0 ]; then
 	htpasswd -bD /etc/mpasswd kronolith ""
 fi
+%if %mdkversion < 201010
 %_postun_webapp
+%endif
 
 %files
 %defattr(-,root,root)
