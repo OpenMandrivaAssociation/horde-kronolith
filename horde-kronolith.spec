@@ -1,7 +1,7 @@
 %define	module	kronolith
 %define	name	horde-%{module}
 %define version 2.3.2
-%define release %mkrel 3
+%define release %mkrel 4
 
 %define _requires_exceptions pear(Horde.*)
 
@@ -21,7 +21,6 @@ Requires:	php-pear-Date
 Requires:	php-pear-HTML_Common
 Requires:	php-pear-HTML_Select
 BuildArch:	noarch
-BuildRoot:	%{_tmppath}/%{name}-%{version}
 
 %description
 Kronolith is the Horde calendar application. It provides a stable and
