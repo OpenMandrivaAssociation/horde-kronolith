@@ -1,7 +1,7 @@
 %define	module	kronolith
 %define	name	horde-%{module}
-%define version 2.3.2
-%define release %mkrel 4
+%define version 2.3.4
+%define release %mkrel 1
 
 %define _requires_exceptions pear(Horde.*)
 
