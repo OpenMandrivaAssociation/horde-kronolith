@@ -1,7 +1,7 @@
 %define	module	kronolith
 %define	name	horde-%{module}
 %define version 2.3.5
-%define release %mkrel 1
+%define release %mkrel 2
 
 %define _requires_exceptions pear(Horde.*)
 
@@ -18,8 +18,8 @@ Requires:	horde >= 3.3.5
 Requires:	horde-imp >= 4.0
 Requires:	php-mcal
 Requires:	php-pear-Date
-Requires:	php-pear-HTML_Common
-Requires:	php-pear-HTML_Select
+Suggests:	php-pear-Date_Holidays
+Suggests:	php-pear-XML_Serializer
 BuildArch:	noarch
 
 %description
