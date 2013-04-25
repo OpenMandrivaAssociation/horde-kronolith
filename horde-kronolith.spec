@@ -1,13 +1,8 @@
 %define	module	kronolith
-%define	name	horde-%{module}
-%define version 2.3.5
-%define release %mkrel 2
 
-%define _requires_exceptions pear(Horde.*)
-
-Name: 		%{name}
-Version: 	%{version}
-Release: 	%{release}
+Name: 		horde-%{module}
+Version: 	2.3.5
+Release: 	3
 Summary:	The Horde calendar application
 License:	LGPL
 Group:		System/Servers
@@ -35,8 +30,6 @@ applications.
 %build
 
 %install
-rm -rf %{buildroot}
-
 # apache configuration
 install -d -m 755 %{buildroot}%{_webappconfdir}
 cat > %{buildroot}%{_webappconfdir}/%{name}.conf <<EOF
@@ -118,9 +111,6 @@ for file in `find %{buildroot}%{_datadir}/horde/%{module}/scripts`; do
 	perl -pi -e 's|/usr/local/bin/php|/usr/bin/php|' $file
 done
 
-%clean
-rm -rf %{buildroot}
-
 %post
 if [ $1 = 1 ]; then
 	# calendar access
@@ -133,17 +123,11 @@ if [ $1 = 1 ]; then
 	%create_ghostfile %{_sysconfdir}/horde/%{module}/conf.php.bak apache apache 644
 
 fi
-%if %mdkversion < 201010
-%_post_webapp
-%endif
 
 %postun
 if [ $1 = 0 ]; then
 	htpasswd -bD /etc/mpasswd kronolith ""
 fi
-%if %mdkversion < 201010
-%_postun_webapp
-%endif
 
 %files
 %defattr(-,root,root)
