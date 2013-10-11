@@ -2,7 +2,7 @@
 
 Name: 		horde-%{module}
 Version: 	2.3.5
-Release: 	3
+Release: 	4
 Summary:	The Horde calendar application
 License:	LGPL
 Group:		System/Servers
@@ -126,7 +126,6 @@ if [ $1 = 0 ]; then
 fi
 
 %files
-%defattr(-,root,root)
 %doc README COPYING docs
 %config(noreplace) %{_webappconfdir}/%{name}.conf
 %config(noreplace) %{_sysconfdir}/horde/registry.d/%{module}.php
