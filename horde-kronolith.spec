@@ -3,7 +3,7 @@
 
 Name: 		horde-%{module}
 Version: 	2.3.5
-Release: 	5
+Release: 	6
 Summary:	The Horde calendar application
 
 License:	LGPL
